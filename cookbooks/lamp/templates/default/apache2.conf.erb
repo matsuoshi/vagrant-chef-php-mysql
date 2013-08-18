@@ -1,0 +1,18 @@
+LoadModule vhost_alias_module /usr/lib/apache2/modules/mod_vhost_alias.so
+
+NameVirtualHost *:80
+
+<Directory "/sites">
+  Options Indexes FollowSymLinks Includes ExecCGI
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+</Directory>
+
+<VirtualHost *:80>
+  ServerAdmin webmaster@localhost
+  ServerName localhost
+  ServerAlias *.localhost
+  VirtualDocumentRoot /sites/%1/public_html
+
+</VirtualHost>
