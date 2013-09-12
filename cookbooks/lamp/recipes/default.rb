@@ -1,14 +1,41 @@
-packages = %w{git apache2 curl mysql-server php5 libapache2-mod-php5 php5-mysql php5-curl php5-cli php5-common php-pear php5-dev php5-gd}
+packages = %w{apache2 git curl mysql-server libapache2-mod-php5}
+packages_php =%w{php5 php5-mysql php5-curl php5-cli php5-common php-pear php5-dev php5-gd}
+php_version = "5.4*"
 
+
+### for php5.4
+execute "1st apt-get update" do
+  command "apt-get update"
+end
+
+package "python-software-properties" do
+  action [:install, :upgrade]
+end  
+
+execute "add ppa:ondrej/php5-oldstable" do
+  command "add-apt-repository ppa:ondrej/php5-oldstable"
+#  command "add-apt-repository ppa:ondrej/php5"
+end
+
+
+### install
 execute "apt-get update" do
   command "apt-get update"
 end
 
+
+### install packages
 packages.each do |pkg|
   package pkg do
-  	action :install
-#   action [:install, :upgrade]
-#   version node.default[:versions][pkg]
+    action :install
+  end
+end
+
+### install php
+packages_php.each do |pkg|
+  package pkg do
+    action [:install, :upgrade]
+	version php_version
   end
 end
 
@@ -18,6 +45,7 @@ execute "phpunit-install" do
   command "pear config-set auto_discover 1; pear install pear.phpunit.de/PHPUnit"
   not_if { ::File.exists?("/usr/bin/phpunit")}
 end
+
 
 ### composer
 execute "composer-install" do
@@ -50,6 +78,7 @@ end
 service "mysql" do
   action [ :enable, :start]
 end
+
 
 ### group
 group "www-data" do
