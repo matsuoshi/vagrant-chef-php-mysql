@@ -54,6 +54,12 @@ execute "composer-install" do
 end
 
 
+### timezone
+execute "timezone" do
+  command "echo 'Asia/Tokyo' > /etc/timezone ; dpkg-reconfigure -f noninteractive tzdata"
+end
+
+
 ### apache2
 bash "rewrite" do
   code <<-EOC
