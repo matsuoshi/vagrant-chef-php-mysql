@@ -1,23 +1,4 @@
-packages = %w{apache2 git curl mysql-server libapache2-mod-php5}
-packages_php =%w{php5 php5-mysql php5-curl php5-cli php5-common php-pear php5-dev php5-gd}
-php_version = "5.4*"
-
-
-### for php5.4
-execute "1st apt-get update" do
-  command "apt-get update"
-end
-
-package "python-software-properties" do
-  action [:install, :upgrade]
-end  
-
-execute "add ppa:ondrej/php5-oldstable" do
-  command "add-apt-repository ppa:ondrej/php5-oldstable"
-#  command "add-apt-repository ppa:ondrej/php5"
-end
-
-
+packages = %w{apache2 git curl mysql-server libapache2-mod-php5 php5 php5-mysql php5-curl php5-cli php5-common php-pear php5-dev php5-gd php5-xdebug}
 ### install
 execute "apt-get update" do
   command "apt-get update"
@@ -28,14 +9,6 @@ end
 packages.each do |pkg|
   package pkg do
     action :install
-  end
-end
-
-### install php
-packages_php.each do |pkg|
-  package pkg do
-    action [:install, :upgrade]
-	version php_version
   end
 end
 
